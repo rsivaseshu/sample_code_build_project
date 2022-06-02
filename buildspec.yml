@@ -2,19 +2,30 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      java: corretto8
+    commands:
+      - cp .setting.xml /root/.m2/settings.xml
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get install openjdk-11-jdk -y
+      - apt-get install -y maven
+    finally:
+      - echo This always runs even if the update or install command fails 
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+      - mvn clean install
+    finally:
+      - echo This always runs even if the login command fails 
   build:
     commands:
+      - echo Entered the build phase...
       - echo Build started on `date`
-      - mvn test 
+    finally:
+      - echo This always runs even if the install command fails
   post_build:
     commands:
+      - echo Entered the post_build phase...
       - echo Build completed on `date`
-      - export CODEARTIFACT_TOKEN=`aws codeartifact get-authorization-token --domain ${CODEARTIFACT_DOMAIN} --query authorizationToken --output text`
-      - mvn -s settings.xml clean package deploy
 artifacts:
   files:
-    - target/my-app-1.0-SNAPSHOT.jar
-    - appspec.yml
-  discard-paths: yes
+    - 'target/my-app-1.0-SNAPSHOT.jar'
