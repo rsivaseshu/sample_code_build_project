@@ -15,4 +15,11 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>sample-sample</id>
+      <name>sample-sample</name>
+      <url>https://sample-236642951560.d.codeartifact.us-east-2.amazonaws.com/maven/sample/</url>
+    </repository>
+  </distributionManagement>
 </project>

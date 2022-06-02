@@ -11,7 +11,8 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - mvn package
+      - export CODEARTIFACT_TOKEN=`aws codeartifact get-authorization-token --domain ${CODEARTIFACT_DOMAIN} --query authorizationToken --output text`
+      - mvn -s settings.xml clean package deploy
 artifacts:
   files:
     - target/my-app-1.0-SNAPSHOT.jar
