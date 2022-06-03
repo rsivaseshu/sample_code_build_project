@@ -2,30 +2,18 @@ version: 0.2
 
 phases:
   install:
-    commands:
-      - cp .setting.xml /root/.m2/settings.xml
-      - echo Entered the install phase...
-      - apt-get update -y
-      - apt-get install openjdk-11-jdk -y
-      - apt-get install -y maven
-    finally:
-      - echo This always runs even if the update or install command fails 
-  pre_build:
-    commands:
-      - echo Entered the pre_build phase...
-      - mvn clean install
-    finally:
-      - echo This always runs even if the login command fails 
+    runtime-versions:
+      java: corretto8
   build:
     commands:
-      - echo Entered the build phase...
       - echo Build started on `date`
-    finally:
-      - echo This always runs even if the install command fails
+      - mvn test 
   post_build:
     commands:
-      - echo Entered the post_build phase...
       - echo Build completed on `date`
+      - mvn package
 artifacts:
   files:
-    - 'target/my-app-1.0-SNAPSHOT.jar'
+    - target/my-app-1.0-SNAPSHOT.jar
+    - appspec.yml
+  discard-paths: yes
